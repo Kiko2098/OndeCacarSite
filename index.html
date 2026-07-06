@@ -177,25 +177,19 @@
     }
     #btn-limpar-tudo:hover{background:rgba(255,200,100,.28)}
 
-    #btn-abertura{
+    .btn-toggle{
       background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.18);
       border-radius:8px;color:rgba(255,255,255,.7);
       font-size:.72rem;font-weight:700;padding:5px 9px;
       cursor:pointer;white-space:nowrap;transition:all .15s;flex-shrink:0;
       display:flex;align-items:center;gap:4px
     }
-    #btn-abertura:hover,#btn-abertura:active{background:rgba(255,255,255,.2);color:#fff}
-    #btn-abertura.oculto{display:none}
-    #btn-abertura.ativo{
+    .btn-toggle:hover,.btn-toggle:active{background:rgba(255,255,255,.2);color:#fff}
+    .btn-toggle.oculto{display:none}
+    .btn-toggle.ativo{
       background:rgba(255,160,20,.22);border-color:rgba(255,190,60,.6);color:#ffd166
     }
 
-    .badge-abertura{
-      background:#fff3cd;color:#92400e;
-      border-radius:4px;padding:1px 6px;
-      font-size:.63rem;font-weight:800;
-      text-transform:uppercase;letter-spacing:.2px
-    }
     .tags-dias{display:flex;gap:5px;flex-wrap:wrap;margin-top:3px}
     .tag-dia{border-radius:4px;padding:2px 7px;font-size:.68rem;font-weight:700;border:1px solid}
     .tag-dia.abertura{background:#fff3cd;color:#92400e;border-color:#f59e0b}
@@ -348,7 +342,8 @@
       <input type="date" id="input-data" placeholder="qualquer data"
              min="2026-07-01" max="2027-06-30"/>
       <button class="btn-clear oculto" id="btn-limpar-data">✕</button>
-      <button id="btn-abertura" title="Mostrar só os primeiros dias de cada época">Abertura</button>
+      <button id="btn-abertura" class="btn-toggle" title="Mostrar só os primeiros dias de cada época">Abertura</button>
+      <button id="btn-segundo-dia" class="btn-toggle" title="Mostrar só o 2º dia de cada época">2º dia</button>
     </div>
   </div>
 
@@ -379,42 +374,24 @@ let DADOS=null;
 const getDados=id=>(DADOS&&DADOS.distritos[id])||{reservas:[]};
 let TODAS_ESPECIES=[];
 
-function parseDDMM(ddmm){
-  const[dd,mm]=ddmm.split('/').map(Number);
-  return new Date(mm>=7?2026:2027,mm-1,dd);
-}
 function dataToDDMM(d){
   return`${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}`;
 }
-function emEpoca(ini,fim,data){
-  if(!data)return true;
-  const di=parseDDMM(ini),df=parseDDMM(fim);
-  return df>=di?data>=di&&data<=df:data>=di||data<=df;
-}
 
-const F={especie:null,processo:null,data:null,abertura:false};
+const F={especie:null,processo:null,data:null,abertura:false,segundoDia:false};
 
-function dataRef(){
-  if(F.data)return F.data;
-  const h=new Date();return new Date(h.getFullYear(),h.getMonth(),h.getDate());
-}
-
-function emAbertura(ini,fim,data){
-  if(!ini||!fim)return false;
-  const di=parseDDMM(ini);
-  const abFim=new Date(di.getTime()+6*864e5);
-  return emEpoca(ini,fim,data)&&data>=di&&data<=abFim;
-}
-
-function filtroAtivo(){return F.especie!==null||F.processo!==null||F.data!==null||F.abertura}
+function filtroAtivo(){return F.especie!==null||F.processo!==null||F.data!==null||F.abertura||F.segundoDia}
 
 function especiePassaFiltros(e){
   const especieOk=F.especie===null||e.especie===F.especie;
   const processoOk=F.processo===null||(e.processo&&new RegExp(F.processo,'i').test(e.processo));
   const ddmm=F.data?dataToDDMM(F.data):null;
   const dataOk=!F.data||(e.dias&&e.dias.includes(ddmm));
-  const aberturaOk=!F.abertura||(e.dias&&(e.dias[0]===ddmm||e.dias[1]===ddmm));
-  return especieOk&&processoOk&&dataOk&&aberturaOk;
+  let diaPosicaoOk=true;
+  if(F.abertura||F.segundoDia){
+    diaPosicaoOk=!!(e.dias&&((F.abertura&&e.dias[0]===ddmm)||(F.segundoDia&&e.dias[1]===ddmm)));
+  }
+  return especieOk&&processoOk&&dataOk&&diaPosicaoOk;
 }
 
 function distritoPassaFiltros(id){
@@ -446,6 +423,8 @@ function atualizarEstadoFiltros(){
   btnData.classList.toggle('oculto',F.data===null);
   document.getElementById('btn-abertura').classList.toggle('oculto',F.data===null);
   document.getElementById('btn-abertura').classList.toggle('ativo',F.abertura);
+  document.getElementById('btn-segundo-dia').classList.toggle('oculto',F.data===null);
+  document.getElementById('btn-segundo-dia').classList.toggle('ativo',F.segundoDia);
   document.getElementById('tab-filtros').classList.toggle('tem-filtros',ativo);
 
   document.querySelectorAll('#chips-processo .chip').forEach(chip=>{
@@ -490,15 +469,18 @@ inputData.addEventListener('change',()=>{
     const[y,m,d]=inputData.value.split('-').map(Number);
     F.data=new Date(y,m-1,d);
   } else {
-    F.data=null;F.abertura=false;
+    F.data=null;F.abertura=false;F.segundoDia=false;
   }
   aplicarFiltros();
 });
 document.getElementById('btn-limpar-data').addEventListener('click',()=>{
-  inputData.value='';F.data=null;F.abertura=false;aplicarFiltros();
+  inputData.value='';F.data=null;F.abertura=false;F.segundoDia=false;aplicarFiltros();
 });
 document.getElementById('btn-abertura').addEventListener('click',()=>{
   F.abertura=!F.abertura;aplicarFiltros();
+});
+document.getElementById('btn-segundo-dia').addEventListener('click',()=>{
+  F.segundoDia=!F.segundoDia;aplicarFiltros();
 });
 document.querySelectorAll('#chips-processo .chip').forEach(chip=>{
   chip.addEventListener('click',()=>{
@@ -507,7 +489,7 @@ document.querySelectorAll('#chips-processo .chip').forEach(chip=>{
   });
 });
 document.getElementById('btn-limpar-tudo').addEventListener('click',()=>{
-  inputData.value='';F.especie=null;F.processo=null;F.data=null;F.abertura=false;aplicarFiltros();
+  inputData.value='';F.especie=null;F.processo=null;F.data=null;F.abertura=false;F.segundoDia=false;aplicarFiltros();
 });
 
 const painel=document.getElementById('painel');
@@ -633,7 +615,6 @@ function renderReservas(reservas){
 
     especies.forEach(e=>{
       const passa=especiePassaFiltros(e);
-      const naAbertura=emAbertura(e.inicio,e.fim,dataRef());
       const row=document.createElement('div');
       row.className='especie-row'+(temFiltro&&!passa?' fora':'');
       row.innerHTML=
@@ -641,8 +622,7 @@ function renderReservas(reservas){
         '<div class="especie-info">'+
           '<div class="especie-titulo">'+
             '<span class="especie-nome">'+capitalizar(e.especie)+'</span>'+
-            '<span class="tag '+tg(e.processo)+'">'+(e.processo||'—')+'</span>'+
-            (naAbertura?'<span class="badge-abertura">Abertura</span>':'')+'</div>'+
+            '<span class="tag '+tg(e.processo)+'">'+(e.processo||'—')+'</span>'+'</div>'+
           (e.dias&&e.dias.length>=1?'<div class="tags-dias">'+
             '<span class="tag-dia abertura">Abertura: '+e.dias[0]+'</span>'+
             (e.dias.length>=2?'<span class="tag-dia segundo">2º dia: '+e.dias[1]+'</span>':'')+
