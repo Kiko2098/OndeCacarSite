@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no,viewport-fit=cover"/>
   <title>OndeCaçar.pt</title>
   <link rel="icon" type="image/png" href="favicon.png"/>
   <link rel="icon" type="image/x-icon" href="favicon.ico"/>
@@ -11,7 +11,7 @@
     :root{
       --vd:#1e3d0f; --vm:#2d5016; --vc:#5a8a3c; --vh:#78b84a;
       --fp:#f7f4ef; --borda:#e0d8cc; --txt:#1e3d0f; --suave:#6b7280;
-      --sr:20px; --tb:72px; --tb2:46px;
+      --sr:20px; --tb:72px; --sab:env(safe-area-inset-bottom,0px); --tb2:46px;
     }
     html,body{height:100%;overflow:hidden}
     body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#b8ccaa;-webkit-tap-highlight-color:transparent}
@@ -24,6 +24,7 @@
     }
     #topbar img{height:58px;width:auto}
     #topbar-titulo{font-size:.8rem;font-weight:700;color:var(--vd);text-align:right;line-height:1.35}
+    #topbar-atualizacao{font-size:.62rem;color:var(--suave);text-align:right;margin-top:1px;display:flex;flex-direction:column;gap:1px}
 
     #header-mobile2{
       display:flex;position:fixed;top:var(--tb);left:0;right:0;height:var(--tb2);
@@ -45,7 +46,7 @@
     #painel-filtros{
       display:flex;flex-direction:column;background:#243d12;overflow-y:auto;
       position:fixed;left:0;right:0;bottom:0;z-index:50;
-      top:calc(var(--tb) + var(--tb2));height:calc(100vh - var(--tb) - var(--tb2));
+      top:calc(var(--tb) + var(--tb2));height:calc(100dvh - var(--tb) - var(--tb2) - var(--sab));
       transition:transform .45s cubic-bezier(.32,.72,0,1);will-change:transform
     }
     #filtros-bar{border-radius:0 0 var(--sr) var(--sr)}
@@ -57,7 +58,7 @@
       background:linear-gradient(150deg,#ccdab8 0%,#b2c89e 100%);
       transition:transform .45s cubic-bezier(.32,.72,0,1);will-change:transform
     }
-    #mapa-svg{height:calc(100vh - var(--tb) - var(--tb2));width:auto;max-width:100%;filter:drop-shadow(0 3px 12px rgba(0,0,0,.18));touch-action:none}
+    #mapa-svg{height:calc(100dvh - var(--tb) - var(--tb2) - var(--sab));width:auto;max-width:100%;padding-bottom:var(--sab);filter:drop-shadow(0 3px 12px rgba(0,0,0,.18));touch-action:none}
     #mapa-svg path{fill:var(--vc);stroke:#2d4a1a;stroke-width:.8;cursor:pointer;transition:fill .13s,opacity .2s}
     #mapa-svg path.hover      {fill:var(--vh)}
     #mapa-svg path.selecionado{fill:var(--vd);stroke:#0f1e07;stroke-width:1.2}
@@ -79,7 +80,7 @@
 
     #painel{
       position:fixed;left:0;right:0;bottom:0;z-index:50;
-      top:calc(var(--tb) + var(--tb2));height:calc(100vh - var(--tb) - var(--tb2));
+      top:calc(var(--tb) + var(--tb2));height:calc(100dvh - var(--tb) - var(--tb2) - var(--sab));
       display:flex;flex-direction:column;background:var(--fp);
       transition:transform .45s cubic-bezier(.32,.72,0,1);will-change:transform
     }
@@ -284,7 +285,13 @@
 
 <div id="topbar">
   <img src="logo.png" alt="OndeCaçar">
-  <div id="topbar-titulo">Reservas de Caça Municipais<br>2026–2027</div>
+  <div>
+    <div id="topbar-titulo">Reservas de Caça Municipais<br>2026–2027</div>
+    <div id="topbar-atualizacao">
+      <span id="topbar-atualizado-em"></span>
+      <span id="topbar-visitantes">50 visitantes (últimas 2 semanas)</span>
+    </div>
+  </div>
 </div>
 
 <div id="header-mobile2">
@@ -675,6 +682,10 @@ painelFiltros.appendChild(filtrosBar);
       TODAS_ESPECIES=[...new Set(
         Object.values(DADOS.distritos).flatMap(d=>d.reservas.flatMap(r=>r.especies.map(e=>e.especie)))
       )].sort();
+      if(json.gerado_em){
+        const[y,m,d]=json.gerado_em.split('-');
+        document.getElementById('topbar-atualizado-em').textContent='Atualizado em '+d+'/'+m+'/'+y;
+      }
       renderChips();
       aplicarFiltros();
       setVazio('','Seleciona um distrito','Usa os filtros acima ou toca diretamente num distrito.');
