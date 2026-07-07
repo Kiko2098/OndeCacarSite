@@ -289,7 +289,7 @@
     <div id="topbar-titulo">Reservas de Caça Municipais<br>2026–2027</div>
     <div id="topbar-atualizacao">
       <span id="topbar-atualizado-em"></span>
-      <span id="topbar-visitantes">50 visitantes (últimas 2 semanas)</span>
+      <span id="topbar-visitantes"></span>
     </div>
   </div>
 </div>
@@ -694,6 +694,16 @@ painelFiltros.appendChild(filtrosBar);
       setVazio('','Erro ao carregar dados',err.message);
       console.error(err);
     });
+})();
+
+(function carregarVisitantes(){
+  fetch('visitantes.json')
+    .then(r=>{if(!r.ok)throw new Error('HTTP '+r.status);return r.json();})
+    .then(json=>{
+      document.getElementById('topbar-visitantes').textContent=
+        json.visitantes+' visitantes (últimos '+json.periodo_dias+' dias)';
+    })
+    .catch(err=>console.error('Erro ao carregar visitantes:',err));
 })();
 </script>
 </body>
