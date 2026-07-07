@@ -279,6 +279,18 @@
       text-align:center;margin:8px 0
     }
 
+    #btn-info{
+      position:fixed;left:16px;bottom:calc(16px + var(--sab));
+      width:48px;height:48px;border-radius:50%;
+      background:var(--vd);color:#fff;
+      display:flex;align-items:center;justify-content:center;
+      box-shadow:0 3px 10px rgba(0,0,0,.25);
+      z-index:100;text-decoration:none;
+      transition:transform .15s,background .15s
+    }
+    #btn-info:hover,#btn-info:active{background:var(--vm);transform:scale(1.06)}
+    #btn-info svg{width:24px;height:24px}
+
   </style>
 </head>
 <body class="vista-mapa">
@@ -288,7 +300,6 @@
   <div>
     <div id="topbar-titulo">Reservas de Caça Municipais<br>2026–2027</div>
     <div id="topbar-atualizacao">
-      <span id="topbar-atualizado-em"></span>
       <span id="topbar-visitantes"></span>
     </div>
   </div>
@@ -372,6 +383,14 @@
     <div id="lista-reservas"></div>
   </div>
 </div>
+
+<a id="btn-info" href="contactos.html" aria-label="Informação e contactos" title="Informação e contactos">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10"></circle>
+    <line x1="12" y1="16" x2="12" y2="12"></line>
+    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+  </svg>
+</a>
 
 <script>
 const ic=()=>'';
@@ -682,10 +701,6 @@ painelFiltros.appendChild(filtrosBar);
       TODAS_ESPECIES=[...new Set(
         Object.values(DADOS.distritos).flatMap(d=>d.reservas.flatMap(r=>r.especies.map(e=>e.especie)))
       )].sort();
-      if(json.gerado_em){
-        const[y,m,d]=json.gerado_em.split('-');
-        document.getElementById('topbar-atualizado-em').textContent='Atualizado em '+d+'/'+m+'/'+y;
-      }
       renderChips();
       aplicarFiltros();
       setVazio('','Seleciona um distrito','Usa os filtros acima ou toca diretamente num distrito.');

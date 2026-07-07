@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no,viewport-fit=cover"/>
+  <title>Contactos — OndeCaçar.pt</title>
+  <link rel="icon" type="image/png" href="favicon.png"/>
+  <link rel="icon" type="image/x-icon" href="favicon.ico"/>
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    :root{
+      --vd:#1e3d0f; --vm:#2d5016; --vc:#5a8a3c; --vh:#78b84a;
+      --fp:#f7f4ef; --borda:#e0d8cc; --txt:#1e3d0f; --suave:#6b7280;
+      --sr:20px; --tb:72px; --sab:env(safe-area-inset-bottom,0px); --tb2:46px;
+    }
+    html,body{height:100%;overflow:hidden}
+    body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#b8ccaa;-webkit-tap-highlight-color:transparent}
+
+    #topbar{
+      position:fixed;top:0;left:0;right:0;height:var(--tb);
+      background:#fff;border-bottom:1px solid var(--borda);
+      display:flex;align-items:center;justify-content:space-between;
+      padding:0 22px 0 16px;z-index:150;flex-shrink:0;
+    }
+    #topbar img{height:58px;width:auto}
+    #topbar-titulo{font-size:.8rem;font-weight:700;color:var(--vd);text-align:right;line-height:1.35}
+
+    #header-mobile2{
+      display:flex;position:fixed;top:var(--tb);left:0;right:0;height:var(--tb2);
+      background:var(--vd);z-index:140;flex-shrink:0;
+      align-items:center;justify-content:center;padding:0 12px;
+      border-bottom:1px solid rgba(255,255,255,.12)
+    }
+    #voltar-link{
+      display:flex;align-items:center;gap:6px;
+      color:#fff;text-decoration:none;font-size:.78rem;font-weight:700;
+      background:rgba(255,255,255,.1);border-radius:8px;padding:6px 14px;
+    }
+    #voltar-link:hover,#voltar-link:active{background:rgba(255,255,255,.18)}
+    #voltar-link svg{width:14px;height:14px}
+
+    #conteudo{
+      position:fixed;left:0;right:0;bottom:0;z-index:50;
+      top:calc(var(--tb) + var(--tb2));height:calc(100dvh - var(--tb) - var(--tb2) - var(--sab));
+      overflow-y:auto;background:var(--fp);
+      padding:16px 12px calc(16px + var(--sab));
+      -webkit-overflow-scrolling:touch;
+    }
+    #conteudo::-webkit-scrollbar{width:4px}
+    #conteudo::-webkit-scrollbar-thumb{background:#c5bfb5;border-radius:4px}
+
+    .aviso-preview{
+      background:#fef9c3;border:1px solid #fde047;border-radius:8px;
+      max-width:480px;margin:0 auto 12px;
+      padding:10px 13px;font-size:.78rem;color:#713f12;text-align:center;
+    }
+
+    h1{
+      max-width:480px;margin:4px auto 12px;
+      font-size:1.05rem;font-weight:800;color:var(--vd);padding:0 4px;
+    }
+
+    .contacto-card{
+      background:#fff;border:1px solid var(--borda);border-radius:10px;
+      max-width:480px;margin:0 auto 9px;overflow:hidden;
+      box-shadow:0 1px 3px rgba(0,0,0,.05);padding:12px 14px;
+    }
+    .contacto-card .lbl{
+      display:block;font-size:.68rem;font-weight:700;text-transform:uppercase;
+      letter-spacing:.3px;color:var(--suave);margin-bottom:3px;
+    }
+    .contacto-card a,.contacto-card .valor{
+      font-size:.88rem;font-weight:700;color:var(--txt);text-decoration:none;
+    }
+    .contacto-card a:hover{color:var(--vm)}
+    .contacto-card .valor{font-weight:400;display:block}
+
+    @media(max-width:767px){
+      #topbar{padding:0 14px 0 12px}
+      #topbar-titulo{font-size:.68rem}
+    }
+  </style>
+</head>
+<body>
+
+<div id="topbar">
+  <img src="logo.png" alt="OndeCaçar">
+  <div id="topbar-titulo">Contactos</div>
+</div>
+
+<div id="header-mobile2">
+  <a id="voltar-link" href="index.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="19" y1="12" x2="5" y2="12"></line>
+      <polyline points="12 19 5 12 12 5"></polyline>
+    </svg>
+    Voltar ao mapa
+  </a>
+</div>
+
+<div id="conteudo">
+  <div class="aviso-preview">Página de pré-visualização — os dados abaixo são placeholders e vão ser substituídos.</div>
+
+  <h1>Fala connosco</h1>
+
+  <div class="contacto-card">
+    <span class="lbl">Email</span>
+    <a href="mailto:contacto@ondecacar.pt">contacto@ondecacar.pt</a>
+  </div>
+
+  <div class="contacto-card">
+    <span class="lbl">Instagram</span>
+    <a href="#" target="_blank" rel="noopener">@ondecacar</a>
+  </div>
+
+  <div class="contacto-card">
+    <span class="lbl">Sobre</span>
+    <span class="valor">Texto de exemplo — substituir por uma breve descrição do projeto.</span>
+  </div>
+</div>
+
+</body>
+</html>
