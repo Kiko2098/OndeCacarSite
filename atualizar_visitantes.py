@@ -1,5 +1,6 @@
 """Consulta a GraphQL Analytics API da Cloudflare e grava o número de
-visitantes únicos dos últimos 14 dias em visitantes.json (raiz do site).
+visitantes únicos de Portugal (PT) dos últimos 14 dias em visitantes.json
+(raiz do site).
 
 Variáveis de ambiente necessárias:
   CLOUDFLARE_API_TOKEN — token com permissão "Zone > Analytics > Read"
@@ -16,15 +17,16 @@ import urllib.request
 from datetime import date, timedelta
 
 DIAS = 14
+PAIS = "PT"  # ISO 3166-1 alpha-2 — filtra visitantes só de Portugal
 CAMINHO_SAIDA = os.path.join(os.path.dirname(__file__), "visitantes.json")
 
 QUERY = """
-query Visitantes($zoneTag: string, $desde: string, $ate: string) {
+query Visitantes($zoneTag: string, $desde: string, $ate: string, $pais: string) {
   viewer {
     zones(filter: { zoneTag: $zoneTag }) {
       httpRequests1dGroups(
         limit: 1
-        filter: { date_geq: $desde, date_leq: $ate }
+        filter: { date_geq: $desde, date_leq: $ate, clientCountryName: $pais }
       ) {
         uniq { uniques }
         sum { requests pageViews }
@@ -45,6 +47,7 @@ def consultar_cloudflare(token, zone_id):
             "zoneTag": zone_id,
             "desde": desde.isoformat(),
             "ate": hoje.isoformat(),
+            "pais": PAIS,
         },
     }).encode("utf-8")
 
