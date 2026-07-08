@@ -661,7 +661,10 @@ function renderReservas(reservas){
 
     const body=document.createElement('div');body.className='reserva-body';
 
-    especies.forEach(e=>{
+    const rankProcesso=p=>p&&/^salto/i.test(p)?0:(p&&/^espera/i.test(p)?1:2);
+    const especiesOrdenadas=[...especies].sort((a,b)=>rankProcesso(a.processo)-rankProcesso(b.processo));
+
+    especiesOrdenadas.forEach(e=>{
       const passa=especiePassaFiltros(e);
       const row=document.createElement('div');
       row.className='especie-row'+(temFiltro&&!passa?' fora':'');
