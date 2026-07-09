@@ -9,6 +9,7 @@
   <link rel="canonical" href="https://xn--ondecaar-x0a.pt/preencher-candidatura.html"/>
   <link rel="icon" type="image/png" href="favicon.png"/>
   <link rel="icon" type="image/x-icon" href="favicon.ico"/>
+  <script src="vendor/jspdf.umd.min.js"></script>
   <style>
     *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
     :root{
@@ -41,14 +42,6 @@
     }
     #voltar-link:hover,#voltar-link:active{background:rgba(255,255,255,.18)}
     #voltar-link svg{width:14px;height:14px}
-    #gerar-pdf-top{
-      display:flex;align-items:center;gap:6px;
-      color:var(--vd);text-decoration:none;font-size:.78rem;font-weight:700;
-      background:#fff;border:none;border-radius:8px;padding:6px 14px;
-      cursor:pointer;
-    }
-    #gerar-pdf-top:hover{background:var(--fp)}
-
     #conteudo{
       position:fixed;left:0;right:0;bottom:0;z-index:50;
       top:calc(var(--tb) + var(--tb2));height:calc(100dvh - var(--tb) - var(--tb2) - var(--sab));
@@ -113,88 +106,6 @@
       font-size:.78rem;color:#7a5c00;line-height:1.5;
     }
 
-    /* ---------- Área de impressão (folha oficial) ---------- */
-    #folha-impressao{display:none}
-
-    @media print{
-      @page{size:A4;margin:14mm}
-      @page :first{margin-top:14mm}
-      #topbar,#header-mobile2,.aviso-topo,.acoes,.bloco,#conteudo>h1,#conteudo>.lead,.remover-candidato,#add-candidato-wrap{display:none !important}
-      html,body{height:auto;overflow:visible;background:#fff}
-      #conteudo{position:static;height:auto;overflow:visible;padding:0;background:#fff}
-      #folha-impressao{
-        --pc:#000;
-        display:block;width:100%;font-family:'Times New Roman',serif;color:var(--pc);font-size:9.5px;line-height:1.3;
-        zoom:0.96;
-      }
-      #folha-impressao table{width:100%;border-collapse:collapse;margin-bottom:0}
-      #folha-impressao>table{outline:1px solid var(--pc)}
-      #folha-impressao table.tbl-open{outline:none}
-      #folha-impressao #tabela-epoca{outline:none;width:auto;margin-left:auto;margin-right:auto}
-      #folha-impressao table.tbl-open tr td:first-child{border-left:none}
-      #folha-impressao table.tbl-open tr td:last-child{border-right:none}
-      #folha-impressao #p-epoca-ini,#folha-impressao #p-epoca-fim{border:none;padding:2px 2px 2px 2px;width:auto}
-      #folha-impressao #sep-epoca{border:none}
-      #folha-impressao #linha-1 td:first-child,
-      #folha-impressao #linha-2 td:first-child,
-      #folha-impressao #linha-2-3 td:first-child{border-left:1px solid var(--pc)}
-      #folha-impressao #linha-1 td:last-child,
-      #folha-impressao #linha-2 td:last-child,
-      #folha-impressao #linha-2-3 td:last-child{border-right:1px solid var(--pc)}
-      #folha-impressao td{border:1px solid var(--pc);padding:2px 5px;vertical-align:middle}
-      #folha-impressao .titulo-form{text-align:center;font-weight:700;font-size:15px;letter-spacing:.5px;padding:4px 0 10px;border:none;font-variant:small-caps}
-      #folha-impressao .num-cel{font-weight:700;text-align:center;width:3%}
-      #folha-impressao .lbl-cel{font-weight:700;white-space:nowrap;width:1%}
-      #folha-impressao #lbl-1,#folha-impressao #lbl-2{background:#eee}
-      #folha-impressao #p-ct-cp{width:1%;white-space:nowrap}
-      #folha-impressao .v{min-height:14px}
-
-      /* ---------- Candidatos: divs + flexbox (cada linha independente, sem colunas partilhadas) ---------- */
-      #folha-impressao .candidato-box{border:1px solid var(--pc);border-top:none;margin-top:0}
-      #folha-impressao .candidato-box:first-of-type{border-top:1px solid var(--pc)}
-      #folha-impressao .candidato-box .secc-row{background:#eee;font-weight:700;text-align:center;padding:2px 5px;border-bottom:1px solid var(--pc)}
-      #folha-impressao .candidato-box .linha{display:flex;border-bottom:1px solid var(--pc)}
-      #folha-impressao .candidato-box .linha>*{padding:2px 5px;border-right:1px solid var(--pc);display:flex;align-items:center}
-      #folha-impressao .candidato-box .linha>*:last-child{border-right:none}
-      #folha-impressao .candidato-box .lbl-cel{flex-shrink:0;width:auto}
-      #folha-impressao .candidato-box .campo-nome-valor,
-      #folha-impressao .candidato-box .campo-predios-valor,
-      #folha-impressao .candidato-box .campo-direcao-valor{flex:1;min-width:0}
-      #folha-impressao .candidato-box .campo-municipio-valor{width:52%;flex-shrink:0}
-      #folha-impressao .candidato-box .campo-carta-lbl{width:16%;white-space:normal}
-      #folha-impressao .campo-zc-nome-valor{width:55%}
-      #folha-impressao .candidato-box .campo-carta-valor{flex:1;min-width:0}
-      #folha-impressao .candidato-box .campo-membro-valor{width:17.4%;flex-shrink:0}
-      #folha-impressao .candidato-box .campo-socio-valor{flex:1;min-width:0}
-
-      /* caixas de dígitos (Proc. ICNF, Carta de Caçador, Código-Postal) */
-      #folha-impressao .dboxes{display:inline-flex;gap:0;vertical-align:middle}
-      #folha-impressao .dbox{
-        display:inline-block;width:11px;height:13px;line-height:13px;text-align:center;
-        border:1px solid var(--pc);font-weight:700;margin-left:-1px;
-      }
-      #folha-impressao .dboxes:first-child .dbox:first-child{margin-left:0}
-
-      /* checkboxes Sim/Não, Proprietário/Arrendatário/Outro */
-      #folha-impressao .opcoes{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
-      #folha-impressao .opcao{display:inline-flex;align-items:center;gap:3px;white-space:nowrap}
-      #folha-impressao .chk{
-        display:inline-block;width:9px;height:9px;border:1px solid var(--pc);text-align:center;
-        line-height:8px;font-size:8px;font-weight:700;flex-shrink:0;
-      }
-      #folha-impressao .chk.on::after{content:"X"}
-      #folha-impressao .outro-qual{flex:1;min-width:60px;font-weight:400}
-
-      #folha-impressao .tbl-assin{width:100%;border-collapse:collapse;height:34px}
-      #folha-impressao .tbl-assin td{border-top:none;border-right:1px solid var(--pc);padding:2px 5px}
-      #folha-impressao .tbl-assin td:last-child{border-right:none}
-      #folha-impressao .campo-data{width:30%;white-space:nowrap;vertical-align:bottom}
-      #folha-impressao .campo-assinatura{width:70%;vertical-align:bottom}
-      #folha-impressao .assin-linha{display:block;width:100%;border-top:1px solid var(--pc);text-align:center;font-style:italic;font-size:8.5px;padding-top:1px}
-      #folha-impressao .obs-cell{min-height:34px}
-      #folha-impressao .rodape{margin-top:8px;font-size:8.5px;color:#333;font-family:Arial,sans-serif;text-align:center}
-      #folha-impressao .legenda{font-size:7.5px;color:#333;margin-top:4px;font-family:Arial,sans-serif;line-height:1.4}
-    }
   </style>
 </head>
 <body>
@@ -216,8 +127,7 @@
 
 <div id="conteudo">
   <h1>Candidatura ao exercício da caça em ZCM</h1>
-  <p class="lead">Preencha os campos abaixo e clique em "Gerar PDF" — o seu navegador abre a janela de impressão, onde pode escolher "Guardar como PDF" ou imprimir diretamente. As assinaturas ficam por preencher à mão, depois de impresso.</p>
-  <p class="lead"><b>Dica:</b> na janela de impressão, abra "Mais definições" e desligue "Cabeçalhos e rodapés" — sem isso o PDF sai com a data e o endereço da página no topo/rodapé de cada folha.</p>
+  <p class="lead">Preencha os campos abaixo e clique em "Gerar PDF" — o ficheiro é descarregado automaticamente, pronto a imprimir e assinar à mão.</p>
 
   <div class="bloco">
     <div class="bloco-titulo">1 · Identificação da Zona de Caça</div>
@@ -228,7 +138,7 @@
       </div>
       <div class="campo">
         <label for="zc-proc">Proc. ICNF n.º</label>
-        <input type="text" id="zc-proc" placeholder="Ex. 2562">
+        <input type="text" id="zc-proc" placeholder="Ex. 2562" maxlength="4" inputmode="numeric" pattern="[0-9]{4}" oninput="this.value=this.value.replace(/\D/g,'').slice(0,4)">
       </div>
     </div>
     <input type="hidden" id="epoca-ini" value="2026">
@@ -309,344 +219,11 @@
   </div>
 
   <div class="acoes">
-    <button class="primario" onclick="window.print()">Gerar PDF</button>
+    <button class="primario" onclick="gerarPDF('a4', this)">Gerar PDF</button>
     <button class="secundario" onclick="limparFormulario()">Limpar formulário</button>
   </div>
 </div>
 
-<!-- ============ Folha só visível na impressão ============ -->
-<div id="folha-impressao">
-  <div class="titulo-form" id="titulo-form">CANDIDATURA AO EXERCÍCIO DA CAÇA EM ZCM</div>
-  <table id="tabela-epoca">
-    <tr id="linha-epoca">
-      <td id="lbl-epoca" style="border:none;text-align:right;font-weight:700">ÉPOCA VENATÓRIA</td>
-      <td id="p-epoca-ini" style="border:none;white-space:nowrap"></td>
-      <td id="sep-epoca" style="border:none;white-space:nowrap">-</td>
-      <td id="p-epoca-fim" style="border:none;white-space:nowrap"></td>
-    </tr>
-  </table>
-  <div id="espaco-epoca" style="height:10px"></div>
-  <table class="tbl-open" id="tabela-id-zc">
-    <tr id="linha-1">
-      <td class="lbl-cel" id="lbl-1">1&nbsp;&nbsp;Identificação da ZC:</td>
-      <td class="lbl-cel campo-zc-nome-lbl" id="lbl-1-1">1.1&nbsp;Nome</td>
-      <td class="v campo-zc-nome-valor" id="p-zc-nome"></td>
-      <td class="lbl-cel campo-zc-proc-lbl" id="lbl-1-2">1.2&nbsp;*Proc. ICNF n.º</td>
-      <td class="campo-zc-proc-valor" id="p-zc-proc"></td>
-    </tr>
-  </table>
-  <table class="tbl-open" id="tabela-1">
-    <tr id="linha-2">
-      <td class="lbl-cel" id="lbl-2">2&nbsp;&nbsp;Candidatura</td>
-      <td class="lbl-cel" id="lbl-2-1" colspan="2">2.1&nbsp;*Espécie ou grupo de espécies:</td>
-      <td class="v" id="p-especie"></td>
-      <td class="lbl-cel" id="lbl-2-2" colspan="2">2.2&nbsp;*Processo</td>
-      <td class="v" id="p-processo"></td>
-    </tr>
-    <tr id="linha-2-3">
-      <td class="lbl-cel" id="lbl-2-3" colspan="2">2.3&nbsp;*Data(s) a que se candidata</td>
-      <td class="v" colspan="5" id="p-datas"></td>
-    </tr>
-  </table>
-
-  <div id="p-candidatos">
-    <div class="candidato-box" id="candidato-box-1">
-      <div class="secc-row" id="secc-3-1">3&nbsp;&nbsp;Identificação e qualificação do candidato 1</div>
-      <div class="linha" id="linha-3-1-1">
-        <div class="lbl-cel campo-nome-lbl" id="lbl-3-1-1">3.1&nbsp;*Nome</div>
-        <div class="v campo-nome-valor" id="v-3-1-1"></div>
-      </div>
-      <div class="linha" id="linha-3-2-1">
-        <div class="lbl-cel campo-municipio-lbl" id="lbl-3-2-1">3.2&nbsp;*Município de Residência</div>
-        <div class="v campo-municipio-valor" id="v-3-2-1"></div>
-        <div class="lbl-cel campo-carta-lbl" id="lbl-3-3-1">3.3&nbsp;*N.º Carta de Caçador</div>
-        <div class="campo-carta-valor" id="v-3-3-1"><span class="dboxes" id="box-carta-1"><span class="dbox" id="box-carta-1-1"></span><span class="dbox" id="box-carta-1-2"></span><span class="dbox" id="box-carta-1-3"></span><span class="dbox" id="box-carta-1-4"></span><span class="dbox" id="box-carta-1-5"></span><span class="dbox" id="box-carta-1-6"></span></span></div>
-      </div>
-      <div class="linha" id="linha-3-4-1">
-        <div class="lbl-cel campo-predios-lbl" id="lbl-3-4-1">3.4&nbsp;Direitos sobre prédios incluídos na ZCM:</div>
-        <div class="campo-predios-valor" id="v-3-4-1">
-          <span class="opcoes" id="predios-print-1">
-            <span class="opcao"><span class="chk" id="predios-print-1-chk-proprietario"></span> Proprietário</span>
-            <span class="opcao"><span class="chk" id="predios-print-1-chk-arrendatario"></span> Arrendatário</span>
-            <span class="opcao"><span class="chk" id="predios-print-1-chk-outro"></span> Outro qual: <span class="outro-qual" id="predios-print-1-qual"></span></span>
-          </span>
-        </div>
-      </div>
-      <div class="linha" id="linha-3-5-1-1">
-        <div class="lbl-cel campo-direcao-lbl" id="lbl-3-5-1-1">3.5.1&nbsp;Integra a direção da entidade gestora da ZCM:</div>
-        <div class="campo-direcao-valor" id="v-3-5-1-1">
-          <span class="opcoes" id="direcao-print-1">
-            <span class="opcao"><span class="chk" id="direcao-print-1-chk-sim"></span> Sim</span>
-            <span class="opcao"><span class="chk" id="direcao-print-1-chk-nao"></span> Não</span>
-          </span>
-        </div>
-      </div>
-      <div class="linha" id="linha-3-5-2-1">
-        <div class="lbl-cel campo-membro-lbl" id="lbl-3-5-2-1">3.5.2&nbsp;Membro da associação gestora da ZCM</div>
-        <div class="campo-membro-valor" id="v-3-5-2-1">
-          <span class="opcoes" id="membro-print-1">
-            <span class="opcao"><span class="chk" id="membro-print-1-chk-sim"></span> Sim</span>
-            <span class="opcao"><span class="chk" id="membro-print-1-chk-nao"></span> Não</span>
-          </span>
-        </div>
-        <div class="lbl-cel campo-socio-lbl" id="lbl-3-5-3-1">3.5.3&nbsp;**Sócio de ZC na mesma Região Cinegética</div>
-        <div class="campo-socio-valor" id="v-3-5-3-1">
-          <span class="opcoes" id="socio-print-1">
-            <span class="opcao"><span class="chk" id="socio-print-1-chk-sim"></span> Sim</span>
-            <span class="opcao"><span class="chk" id="socio-print-1-chk-nao"></span> Não</span>
-          </span>
-        </div>
-      </div>
-      <table class="tbl-assin" id="assin-row-1">
-        <tr>
-          <td class="campo-data" id="assin-data-cel-1"><span class="assin-linha" id="assin-data-1">(data)</span></td>
-          <td class="campo-assinatura"><span class="assin-linha" id="assin-assinatura-1">*(Assinatura do candidato)</span></td>
-        </tr>
-      </table>
-    </div>
-    <div class="candidato-box" id="candidato-box-2">
-      <div class="secc-row" id="secc-3-2">3&nbsp;&nbsp;Identificação e qualificação do candidato 2</div>
-      <div class="linha" id="linha-3-1-2">
-        <div class="lbl-cel campo-nome-lbl" id="lbl-3-1-2">3.1&nbsp;*Nome</div>
-        <div class="v campo-nome-valor" id="v-3-1-2"></div>
-      </div>
-      <div class="linha" id="linha-3-2-2">
-        <div class="lbl-cel campo-municipio-lbl" id="lbl-3-2-2">3.2&nbsp;*Município de Residência</div>
-        <div class="v campo-municipio-valor" id="v-3-2-2"></div>
-        <div class="lbl-cel campo-carta-lbl" id="lbl-3-3-2">3.3&nbsp;*N.º Carta de Caçador</div>
-        <div class="campo-carta-valor" id="v-3-3-2"><span class="dboxes" id="box-carta-2"><span class="dbox" id="box-carta-2-1"></span><span class="dbox" id="box-carta-2-2"></span><span class="dbox" id="box-carta-2-3"></span><span class="dbox" id="box-carta-2-4"></span><span class="dbox" id="box-carta-2-5"></span><span class="dbox" id="box-carta-2-6"></span></span></div>
-      </div>
-      <div class="linha" id="linha-3-4-2">
-        <div class="lbl-cel campo-predios-lbl" id="lbl-3-4-2">3.4&nbsp;Direitos sobre prédios incluídos na ZCM:</div>
-        <div class="campo-predios-valor" id="v-3-4-2">
-          <span class="opcoes" id="predios-print-2">
-            <span class="opcao"><span class="chk" id="predios-print-2-chk-proprietario"></span> Proprietário</span>
-            <span class="opcao"><span class="chk" id="predios-print-2-chk-arrendatario"></span> Arrendatário</span>
-            <span class="opcao"><span class="chk" id="predios-print-2-chk-outro"></span> Outro qual: <span class="outro-qual" id="predios-print-2-qual"></span></span>
-          </span>
-        </div>
-      </div>
-      <div class="linha" id="linha-3-5-1-2">
-        <div class="lbl-cel campo-direcao-lbl" id="lbl-3-5-1-2">3.5.1&nbsp;Integra a direção da entidade gestora da ZCM:</div>
-        <div class="campo-direcao-valor" id="v-3-5-1-2">
-          <span class="opcoes" id="direcao-print-2">
-            <span class="opcao"><span class="chk" id="direcao-print-2-chk-sim"></span> Sim</span>
-            <span class="opcao"><span class="chk" id="direcao-print-2-chk-nao"></span> Não</span>
-          </span>
-        </div>
-      </div>
-      <div class="linha" id="linha-3-5-2-2">
-        <div class="lbl-cel campo-membro-lbl" id="lbl-3-5-2-2">3.5.2&nbsp;Membro da associação gestora da ZCM</div>
-        <div class="campo-membro-valor" id="v-3-5-2-2">
-          <span class="opcoes" id="membro-print-2">
-            <span class="opcao"><span class="chk" id="membro-print-2-chk-sim"></span> Sim</span>
-            <span class="opcao"><span class="chk" id="membro-print-2-chk-nao"></span> Não</span>
-          </span>
-        </div>
-        <div class="lbl-cel campo-socio-lbl" id="lbl-3-5-3-2">3.5.3&nbsp;**Sócio de ZC na mesma Região Cinegética</div>
-        <div class="campo-socio-valor" id="v-3-5-3-2">
-          <span class="opcoes" id="socio-print-2">
-            <span class="opcao"><span class="chk" id="socio-print-2-chk-sim"></span> Sim</span>
-            <span class="opcao"><span class="chk" id="socio-print-2-chk-nao"></span> Não</span>
-          </span>
-        </div>
-      </div>
-      <table class="tbl-assin" id="assin-row-2">
-        <tr>
-          <td class="campo-data" id="assin-data-cel-2"><span class="assin-linha" id="assin-data-2">(data)</span></td>
-          <td class="campo-assinatura"><span class="assin-linha" id="assin-assinatura-2">*(Assinatura do candidato)</span></td>
-        </tr>
-      </table>
-    </div>
-    <div class="candidato-box" id="candidato-box-3">
-      <div class="secc-row" id="secc-3-3">3&nbsp;&nbsp;Identificação e qualificação do candidato 3</div>
-      <div class="linha" id="linha-3-1-3">
-        <div class="lbl-cel campo-nome-lbl" id="lbl-3-1-3">3.1&nbsp;*Nome</div>
-        <div class="v campo-nome-valor" id="v-3-1-3"></div>
-      </div>
-      <div class="linha" id="linha-3-2-3">
-        <div class="lbl-cel campo-municipio-lbl" id="lbl-3-2-3">3.2&nbsp;*Município de Residência</div>
-        <div class="v campo-municipio-valor" id="v-3-2-3"></div>
-        <div class="lbl-cel campo-carta-lbl" id="lbl-3-3-3">3.3&nbsp;*N.º Carta de Caçador</div>
-        <div class="campo-carta-valor" id="v-3-3-3"><span class="dboxes" id="box-carta-3"><span class="dbox" id="box-carta-3-1"></span><span class="dbox" id="box-carta-3-2"></span><span class="dbox" id="box-carta-3-3"></span><span class="dbox" id="box-carta-3-4"></span><span class="dbox" id="box-carta-3-5"></span><span class="dbox" id="box-carta-3-6"></span></span></div>
-      </div>
-      <div class="linha" id="linha-3-4-3">
-        <div class="lbl-cel campo-predios-lbl" id="lbl-3-4-3">3.4&nbsp;Direitos sobre prédios incluídos na ZCM:</div>
-        <div class="campo-predios-valor" id="v-3-4-3">
-          <span class="opcoes" id="predios-print-3">
-            <span class="opcao"><span class="chk" id="predios-print-3-chk-proprietario"></span> Proprietário</span>
-            <span class="opcao"><span class="chk" id="predios-print-3-chk-arrendatario"></span> Arrendatário</span>
-            <span class="opcao"><span class="chk" id="predios-print-3-chk-outro"></span> Outro qual: <span class="outro-qual" id="predios-print-3-qual"></span></span>
-          </span>
-        </div>
-      </div>
-      <div class="linha" id="linha-3-5-1-3">
-        <div class="lbl-cel campo-direcao-lbl" id="lbl-3-5-1-3">3.5.1&nbsp;Integra a direção da entidade gestora da ZCM:</div>
-        <div class="campo-direcao-valor" id="v-3-5-1-3">
-          <span class="opcoes" id="direcao-print-3">
-            <span class="opcao"><span class="chk" id="direcao-print-3-chk-sim"></span> Sim</span>
-            <span class="opcao"><span class="chk" id="direcao-print-3-chk-nao"></span> Não</span>
-          </span>
-        </div>
-      </div>
-      <div class="linha" id="linha-3-5-2-3">
-        <div class="lbl-cel campo-membro-lbl" id="lbl-3-5-2-3">3.5.2&nbsp;Membro da associação gestora da ZCM</div>
-        <div class="campo-membro-valor" id="v-3-5-2-3">
-          <span class="opcoes" id="membro-print-3">
-            <span class="opcao"><span class="chk" id="membro-print-3-chk-sim"></span> Sim</span>
-            <span class="opcao"><span class="chk" id="membro-print-3-chk-nao"></span> Não</span>
-          </span>
-        </div>
-        <div class="lbl-cel campo-socio-lbl" id="lbl-3-5-3-3">3.5.3&nbsp;**Sócio de ZC na mesma Região Cinegética</div>
-        <div class="campo-socio-valor" id="v-3-5-3-3">
-          <span class="opcoes" id="socio-print-3">
-            <span class="opcao"><span class="chk" id="socio-print-3-chk-sim"></span> Sim</span>
-            <span class="opcao"><span class="chk" id="socio-print-3-chk-nao"></span> Não</span>
-          </span>
-        </div>
-      </div>
-      <table class="tbl-assin" id="assin-row-3">
-        <tr>
-          <td class="campo-data" id="assin-data-cel-3"><span class="assin-linha" id="assin-data-3">(data)</span></td>
-          <td class="campo-assinatura"><span class="assin-linha" id="assin-assinatura-3">*(Assinatura do candidato)</span></td>
-        </tr>
-      </table>
-    </div>
-    <div class="candidato-box" id="candidato-box-4">
-      <div class="secc-row" id="secc-3-4">3&nbsp;&nbsp;Identificação e qualificação do candidato 4</div>
-      <div class="linha" id="linha-3-1-4">
-        <div class="lbl-cel campo-nome-lbl" id="lbl-3-1-4">3.1&nbsp;*Nome</div>
-        <div class="v campo-nome-valor" id="v-3-1-4"></div>
-      </div>
-      <div class="linha" id="linha-3-2-4">
-        <div class="lbl-cel campo-municipio-lbl" id="lbl-3-2-4">3.2&nbsp;*Município de Residência</div>
-        <div class="v campo-municipio-valor" id="v-3-2-4"></div>
-        <div class="lbl-cel campo-carta-lbl" id="lbl-3-3-4">3.3&nbsp;*N.º Carta de Caçador</div>
-        <div class="campo-carta-valor" id="v-3-3-4"><span class="dboxes" id="box-carta-4"><span class="dbox" id="box-carta-4-1"></span><span class="dbox" id="box-carta-4-2"></span><span class="dbox" id="box-carta-4-3"></span><span class="dbox" id="box-carta-4-4"></span><span class="dbox" id="box-carta-4-5"></span><span class="dbox" id="box-carta-4-6"></span></span></div>
-      </div>
-      <div class="linha" id="linha-3-4-4">
-        <div class="lbl-cel campo-predios-lbl" id="lbl-3-4-4">3.4&nbsp;Direitos sobre prédios incluídos na ZCM:</div>
-        <div class="campo-predios-valor" id="v-3-4-4">
-          <span class="opcoes" id="predios-print-4">
-            <span class="opcao"><span class="chk" id="predios-print-4-chk-proprietario"></span> Proprietário</span>
-            <span class="opcao"><span class="chk" id="predios-print-4-chk-arrendatario"></span> Arrendatário</span>
-            <span class="opcao"><span class="chk" id="predios-print-4-chk-outro"></span> Outro qual: <span class="outro-qual" id="predios-print-4-qual"></span></span>
-          </span>
-        </div>
-      </div>
-      <div class="linha" id="linha-3-5-1-4">
-        <div class="lbl-cel campo-direcao-lbl" id="lbl-3-5-1-4">3.5.1&nbsp;Integra a direção da entidade gestora da ZCM:</div>
-        <div class="campo-direcao-valor" id="v-3-5-1-4">
-          <span class="opcoes" id="direcao-print-4">
-            <span class="opcao"><span class="chk" id="direcao-print-4-chk-sim"></span> Sim</span>
-            <span class="opcao"><span class="chk" id="direcao-print-4-chk-nao"></span> Não</span>
-          </span>
-        </div>
-      </div>
-      <div class="linha" id="linha-3-5-2-4">
-        <div class="lbl-cel campo-membro-lbl" id="lbl-3-5-2-4">3.5.2&nbsp;Membro da associação gestora da ZCM</div>
-        <div class="campo-membro-valor" id="v-3-5-2-4">
-          <span class="opcoes" id="membro-print-4">
-            <span class="opcao"><span class="chk" id="membro-print-4-chk-sim"></span> Sim</span>
-            <span class="opcao"><span class="chk" id="membro-print-4-chk-nao"></span> Não</span>
-          </span>
-        </div>
-        <div class="lbl-cel campo-socio-lbl" id="lbl-3-5-3-4">3.5.3&nbsp;**Sócio de ZC na mesma Região Cinegética</div>
-        <div class="campo-socio-valor" id="v-3-5-3-4">
-          <span class="opcoes" id="socio-print-4">
-            <span class="opcao"><span class="chk" id="socio-print-4-chk-sim"></span> Sim</span>
-            <span class="opcao"><span class="chk" id="socio-print-4-chk-nao"></span> Não</span>
-          </span>
-        </div>
-      </div>
-      <table class="tbl-assin" id="assin-row-4">
-        <tr>
-          <td class="campo-data" id="assin-data-cel-4"><span class="assin-linha" id="assin-data-4">(data)</span></td>
-          <td class="campo-assinatura"><span class="assin-linha" id="assin-assinatura-4">*(Assinatura do candidato)</span></td>
-        </tr>
-      </table>
-    </div>
-    <div class="candidato-box" id="candidato-box-5">
-      <div class="secc-row" id="secc-3-5">3&nbsp;&nbsp;Identificação e qualificação do candidato 5</div>
-      <div class="linha" id="linha-3-1-5">
-        <div class="lbl-cel campo-nome-lbl" id="lbl-3-1-5">3.1&nbsp;*Nome</div>
-        <div class="v campo-nome-valor" id="v-3-1-5"></div>
-      </div>
-      <div class="linha" id="linha-3-2-5">
-        <div class="lbl-cel campo-municipio-lbl" id="lbl-3-2-5">3.2&nbsp;*Município de Residência</div>
-        <div class="v campo-municipio-valor" id="v-3-2-5"></div>
-        <div class="lbl-cel campo-carta-lbl" id="lbl-3-3-5">3.3&nbsp;*N.º Carta de Caçador</div>
-        <div class="campo-carta-valor" id="v-3-3-5"><span class="dboxes" id="box-carta-5"><span class="dbox" id="box-carta-5-1"></span><span class="dbox" id="box-carta-5-2"></span><span class="dbox" id="box-carta-5-3"></span><span class="dbox" id="box-carta-5-4"></span><span class="dbox" id="box-carta-5-5"></span><span class="dbox" id="box-carta-5-6"></span></span></div>
-      </div>
-      <div class="linha" id="linha-3-4-5">
-        <div class="lbl-cel campo-predios-lbl" id="lbl-3-4-5">3.4&nbsp;Direitos sobre prédios incluídos na ZCM:</div>
-        <div class="campo-predios-valor" id="v-3-4-5">
-          <span class="opcoes" id="predios-print-5">
-            <span class="opcao"><span class="chk" id="predios-print-5-chk-proprietario"></span> Proprietário</span>
-            <span class="opcao"><span class="chk" id="predios-print-5-chk-arrendatario"></span> Arrendatário</span>
-            <span class="opcao"><span class="chk" id="predios-print-5-chk-outro"></span> Outro qual: <span class="outro-qual" id="predios-print-5-qual"></span></span>
-          </span>
-        </div>
-      </div>
-      <div class="linha" id="linha-3-5-1-5">
-        <div class="lbl-cel campo-direcao-lbl" id="lbl-3-5-1-5">3.5.1&nbsp;Integra a direção da entidade gestora da ZCM:</div>
-        <div class="campo-direcao-valor" id="v-3-5-1-5">
-          <span class="opcoes" id="direcao-print-5">
-            <span class="opcao"><span class="chk" id="direcao-print-5-chk-sim"></span> Sim</span>
-            <span class="opcao"><span class="chk" id="direcao-print-5-chk-nao"></span> Não</span>
-          </span>
-        </div>
-      </div>
-      <div class="linha" id="linha-3-5-2-5">
-        <div class="lbl-cel campo-membro-lbl" id="lbl-3-5-2-5">3.5.2&nbsp;Membro da associação gestora da ZCM</div>
-        <div class="campo-membro-valor" id="v-3-5-2-5">
-          <span class="opcoes" id="membro-print-5">
-            <span class="opcao"><span class="chk" id="membro-print-5-chk-sim"></span> Sim</span>
-            <span class="opcao"><span class="chk" id="membro-print-5-chk-nao"></span> Não</span>
-          </span>
-        </div>
-        <div class="lbl-cel campo-socio-lbl" id="lbl-3-5-3-5">3.5.3&nbsp;**Sócio de ZC na mesma Região Cinegética</div>
-        <div class="campo-socio-valor" id="v-3-5-3-5">
-          <span class="opcoes" id="socio-print-5">
-            <span class="opcao"><span class="chk" id="socio-print-5-chk-sim"></span> Sim</span>
-            <span class="opcao"><span class="chk" id="socio-print-5-chk-nao"></span> Não</span>
-          </span>
-        </div>
-      </div>
-      <table class="tbl-assin" id="assin-row-5">
-        <tr>
-          <td class="campo-data" id="assin-data-cel-5"><span class="assin-linha" id="assin-data-5">(data)</span></td>
-          <td class="campo-assinatura"><span class="assin-linha" id="assin-assinatura-5">*(Assinatura do candidato)</span></td>
-        </tr>
-      </table>
-    </div>
-  </div>
-
-  <table id="tabela-2">
-    <tr class="secc-row" id="secc-3-6"><td colspan="4">3.6&nbsp;&nbsp;***Contactos (primeiro caçador do grupo, em candidatura coletiva)</td></tr>
-    <tr id="linha-morada">
-      <td class="lbl-cel" id="lbl-morada">Morada</td>
-      <td class="v" colspan="3" id="p-ct-morada"></td>
-    </tr>
-    <tr id="linha-cp-tel">
-      <td class="lbl-cel" id="lbl-cp">Código – Postal</td>
-      <td id="p-ct-cp"></td>
-      <td class="lbl-cel" id="lbl-tel">Telefone</td>
-      <td class="v" id="p-ct-tel"></td>
-    </tr>
-
-    <tr class="secc-row" id="secc-4"><td colspan="4">4&nbsp;&nbsp;Observações</td></tr>
-    <tr id="linha-obs"><td colspan="4" class="v obs-cell" id="p-obs"></td></tr>
-  </table>
-
-  <p class="legenda" id="legenda">
-    (*) Campo de preenchimento obrigatório. (**) Campo de preenchimento obrigatório, exceto se assinalou 3.4 ou Sim em 3.5.1<br>
-    (***) No caso de candidatura a autorização especial coletiva (só possível desde que as condições de candidatura e acesso divulgadas o prevejam), os eventuais contactos são estabelecidos com o primeiro caçador do grupo identificado.<br>
-    Se está dispensado de carta de caçador, inscreva em 3.3 o n.º da respetiva Licença para não residentes e leve essa informação ao campo 4.
-  </p>
-
-  <p class="rodape" id="rodape">Documento gerado em <b>OndeCaçar.pt</b> a partir do modelo oficial Mod. ICNF 173-07B (de reprodução livre, disponível em www.icnf.pt).</p>
-</div>
 
 <script>
 let numCandidatos = 0;
@@ -743,53 +320,41 @@ function atualizarPrediosQual(n){
   if(!outro) input.value = '';
 }
 
-function esc(s){
-  const d = document.createElement('div');
-  d.textContent = s == null ? '' : s;
-  return d.innerHTML;
+/* ---------- Geração do PDF (jsPDF + modelo-candidatura.json) ---------- */
+let MODELO_BASE = null;
+fetch('modelo-candidatura.json').then(r => r.json()).then(m => { MODELO_BASE = m; });
+
+function formatarDigitos(valor, n){
+  valor = (valor||'').replace(/\D/g,'').slice(0, n);
+  return valor.split('').join('  ');
 }
 
-function dboxes(valor, n, idBase){
-  valor = (valor||'').replace(/\s+/g,'');
-  let out = `<span class="dboxes"${idBase?` id="${idBase}"`:''}>`;
-  for(let i=0;i<n;i++){
-    const id = idBase ? ` id="${idBase}-${i+1}"` : '';
-    out += `<span class="dbox"${id}>${esc(valor[i]||'')}</span>`;
-  }
-  out += '</span>';
-  return out;
+function formatarCP(valor){
+  const partes = (valor||'').split('-');
+  return formatarDigitos(partes[0], 4) + '  -  ' + formatarDigitos(partes[1], 3);
 }
 
-function preencherDigitos(idBase, valor, n){
-  valor = (valor||'').replace(/\s+/g,'');
-  for(let i=1;i<=n;i++) document.getElementById(`${idBase}-${i}`).textContent = valor[i-1] || '';
+function linhasDeTexto(doc, t){
+  // divide primeiro por quebras manuais, depois por largura maxima (se definida no modelo)
+  const manuais = String(t.text).split('\n');
+  if(!t.maxWidth){ return manuais; }
+  return manuais.flatMap(linha => doc.splitTextToSize(linha, t.maxWidth));
 }
 
-function marcarSimNao(idBase, valor){
-  document.getElementById(`${idBase}-chk-sim`).classList.toggle('on', valor==='Sim');
-  document.getElementById(`${idBase}-chk-nao`).classList.toggle('on', valor==='Não');
-}
-
-function marcarPredios(idBase, valor, qual){
-  document.getElementById(`${idBase}-chk-proprietario`).classList.toggle('on', valor==='Proprietário');
-  document.getElementById(`${idBase}-chk-arrendatario`).classList.toggle('on', valor==='Arrendatário');
-  document.getElementById(`${idBase}-chk-outro`).classList.toggle('on', valor==='Outro');
-  document.getElementById(`${idBase}-qual`).textContent = qual || '';
-}
-
-function prepararImpressao(){
-  document.getElementById('p-epoca-ini').innerHTML = dboxes(document.getElementById('epoca-ini').value, 4, 'box-epoca-ini');
-  document.getElementById('p-epoca-fim').innerHTML = dboxes(document.getElementById('epoca-fim').value, 4, 'box-epoca-fim');
-  document.getElementById('p-zc-nome').textContent = document.getElementById('zc-nome').value;
-  document.getElementById('p-zc-proc').innerHTML = dboxes(document.getElementById('zc-proc').value, 4, 'box-zc-proc');
-  document.getElementById('p-especie').textContent = document.getElementById('c-especie').value;
-  document.getElementById('p-processo').textContent = document.getElementById('c-processo').value;
-  document.getElementById('p-datas').textContent = document.getElementById('c-datas').value;
-  document.getElementById('p-ct-morada').textContent = document.getElementById('ct-morada').value;
-  const cp = (document.getElementById('ct-cp').value||'').split('-');
-  document.getElementById('p-ct-cp').innerHTML = dboxes(cp[0],4,'box-cp-1') + ' - ' + dboxes(cp[1],3,'box-cp-2');
-  document.getElementById('p-ct-tel').textContent = document.getElementById('ct-tel').value;
-  document.getElementById('p-obs').textContent = document.getElementById('obs').value;
+function recolherDadosFormulario(){
+  const valores = {
+    'valor-zc-nome': document.getElementById('zc-nome').value,
+    'valor-proc-icnf': formatarDigitos(document.getElementById('zc-proc').value, 4),
+    'valor-epoca-ano-inicio': formatarDigitos(document.getElementById('epoca-ini').value, 4),
+    'valor-epoca-ano-fim': formatarDigitos(document.getElementById('epoca-fim').value, 4),
+    'valor-especie': document.getElementById('c-especie').value,
+    'valor-processo': document.getElementById('c-processo').value,
+    'valor-datas': document.getElementById('c-datas').value,
+    'valor-morada': document.getElementById('ct-morada').value,
+    'valor-cp': formatarCP(document.getElementById('ct-cp').value),
+    'valor-telefone': document.getElementById('ct-tel').value,
+    'valor-observacoes': document.getElementById('obs').value,
+  };
 
   for(let n=1; n<=5; n++){
     const f = document.querySelector(`#candidatos fieldset.candidato[data-n="${n}"]`);
@@ -804,17 +369,66 @@ function prepararImpressao(){
       membro = f.querySelector('.f-membro').value;
       socio = f.querySelector('.f-socio').value;
     }
-    document.getElementById(`v-3-1-${n}`).textContent = nome;
-    document.getElementById(`v-3-2-${n}`).textContent = municipio;
-    preencherDigitos(`box-carta-${n}`, carta, 6);
-    marcarPredios(`predios-print-${n}`, predios, predioQual);
-    marcarSimNao(`direcao-print-${n}`, direcao);
-    marcarSimNao(`membro-print-${n}`, membro);
-    marcarSimNao(`socio-print-${n}`, socio);
+    valores[`valor-nome-candidato${n}`] = nome;
+    valores[`valor-municipio-candidato${n}`] = municipio;
+    valores[`valor-carta-candidato${n}`] = formatarDigitos(carta, 6);
+    valores[`marca-proprietario-candidato${n}`] = predios === 'Proprietário' ? 'X' : '';
+    valores[`marca-arrendatario-candidato${n}`] = predios === 'Arrendatário' ? 'X' : '';
+    valores[`marca-outro-qual-candidato${n}`] = predios === 'Outro' ? 'X' : '';
+    valores[`text-outro-qual-candidato${n}`] = predios === 'Outro' ? predioQual : '';
+    valores[`valor-3.5.1-marca-sim-candidato${n}`] = direcao === 'Sim' ? 'X' : '';
+    valores[`valor-3.5.1-marca-nao-candidato${n}`] = direcao === 'Não' ? 'X' : '';
+    valores[`valor-3.5.2-marca-sim-candidato${n}`] = membro === 'Sim' ? 'X' : '';
+    valores[`valor-3.5.2-marca-nao-candidato${n}`] = membro === 'Não' ? 'X' : '';
+    valores[`valor-3.5.3-marca-sim-candidato${n}`] = socio === 'Sim' ? 'X' : '';
+    valores[`valor-3.5.3-marca-nao-candidato${n}`] = socio === 'Não' ? 'X' : '';
+  }
+  return valores;
+}
+
+async function gerarPDF(formato, botao){
+  const textoOriginal = botao.textContent;
+  botao.disabled = true;
+  botao.textContent = 'A gerar...';
+  try{
+    if(!MODELO_BASE){
+      MODELO_BASE = await fetch('modelo-candidatura.json').then(r => r.json());
+    }
+    const modelo = JSON.parse(JSON.stringify(MODELO_BASE));
+    const valores = recolherDadosFormulario();
+    modelo.texts.forEach(t => {
+      if(t.campo && Object.prototype.hasOwnProperty.call(valores, t.campo)){
+        t.text = valores[t.campo];
+      }
+    });
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit: 'pt', format: 'a4' });
+    (modelo.rects || []).forEach(r => {
+      const [rr, gg, bb] = r.cor || [238, 238, 238];
+      doc.setFillColor(rr, gg, bb);
+      doc.rect(r.x, r.y, r.w, r.h, 'F');
+    });
+    doc.setLineWidth(0.75);
+    modelo.hlines.forEach(l => doc.line(l.x1, l.y1, l.x2, l.y2));
+    modelo.vlines.forEach(l => doc.line(l.x1, l.y1, l.x2, l.y2));
+    modelo.squares.forEach(s => doc.rect(s.x, s.y, s.w, s.h));
+    modelo.texts.forEach(t => {
+      if(!t.text) return;
+      doc.setFont('times', t.style);
+      doc.setFontSize(t.size);
+      doc.text(linhasDeTexto(doc, t), t.x, t.y, { lineHeightFactor: 1.15 });
+    });
+
+    const nomeZC = document.getElementById('zc-nome').value.trim();
+    const sufixo = nomeZC ? '-' + nomeZC.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'') : '';
+    doc.save(`candidatura-zcm${sufixo}.pdf`);
+  } finally {
+    botao.disabled = false;
+    botao.textContent = textoOriginal;
   }
 }
 
-window.addEventListener('beforeprint', prepararImpressao);
 adicionarCandidato();
 </script>
 
