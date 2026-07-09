@@ -72,6 +72,14 @@
     .contacto-card a:hover{color:var(--vm)}
     .contacto-card .valor{font-weight:400;display:block}
 
+    .contacto-card.btn-card{padding:0}
+    .contacto-card.btn-card a{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      padding:14px 16px;font-size:.88rem;font-weight:700;color:var(--txt);
+    }
+    .contacto-card.btn-card a:hover{background:var(--fp)}
+    .contacto-card.btn-card svg{width:16px;height:16px;stroke:var(--vm);flex-shrink:0}
+
     @media(max-width:767px){
       #topbar{padding:0 14px 0 12px}
       #topbar-titulo{font-size:.68rem}
@@ -97,6 +105,26 @@
 
 <div id="conteudo">
   <h1>Fala connosco</h1>
+
+  <div class="contacto-card btn-card">
+    <a href="preencher-candidatura.html">
+      Preencher candidatura
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+        <polyline points="12 5 19 12 12 19"></polyline>
+      </svg>
+    </a>
+  </div>
+
+  <div class="contacto-card btn-card">
+    <a href="como-inscrever.html">
+      Como enviar a inscrição numa zona de caça
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+        <polyline points="12 5 19 12 12 19"></polyline>
+      </svg>
+    </a>
+  </div>
 
   <div class="contacto-card">
     <span class="lbl">Email</span>

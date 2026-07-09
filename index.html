@@ -310,6 +310,18 @@
     #btn-info:hover,#btn-info:active{background:var(--vm);transform:scale(1.06)}
     #btn-info svg{width:24px;height:24px}
 
+    #btn-preencher{
+      position:fixed;left:16px;bottom:calc(16px + 48px + 10px + var(--sab));
+      width:48px;height:48px;border-radius:50%;
+      background:var(--vd);color:#fff;
+      display:flex;align-items:center;justify-content:center;
+      box-shadow:0 3px 10px rgba(0,0,0,.25);
+      z-index:100;text-decoration:none;
+      transition:transform .15s,background .15s
+    }
+    #btn-preencher:hover,#btn-preencher:active{background:var(--vm);transform:scale(1.06)}
+    #btn-preencher svg{width:22px;height:22px}
+
   </style>
 </head>
 <body class="vista-mapa">
@@ -405,6 +417,15 @@
     <div id="lista-reservas"></div>
   </div>
 </div>
+
+<a id="btn-preencher" href="preencher-candidatura.html" aria-label="Preencher candidatura" title="Preencher candidatura">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+    <polyline points="14 2 14 8 20 8"></polyline>
+    <line x1="16" y1="13" x2="8" y2="13"></line>
+    <line x1="16" y1="17" x2="8" y2="17"></line>
+  </svg>
+</a>
 
 <a id="btn-info" href="contactos.html" aria-label="Informação e contactos" title="Informação e contactos">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
