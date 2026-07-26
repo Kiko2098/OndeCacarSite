@@ -3,21 +3,21 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no,viewport-fit=cover"/>
-  <title>Reservas de Caça Municipais 2026–2027 — OndeCaçar.pt</title>
-  <meta name="description" content="Mapa interativo das Reservas de Caça Municipais em Portugal para a época 2026–2027: consulte por distrito as espécies, processos de caça e calendário de dias autorizados."/>
+  <title>Zonas de Caça Municipais 2026–2027 — OndeCaçar.pt</title>
+  <meta name="description" content="Mapa interativo das Zonas de Caça Municipais em Portugal para a época 2026–2027: consulte por distrito as espécies, processos de caça e calendário de dias autorizados."/>
   <meta name="robots" content="index, follow"/>
   <link rel="canonical" href="https://xn--ondecaar-x0a.pt/"/>
   <meta property="og:type" content="website"/>
   <meta property="og:site_name" content="OndeCaçar.pt"/>
-  <meta property="og:title" content="Reservas de Caça Municipais 2026–2027 — OndeCaçar.pt"/>
-  <meta property="og:description" content="Mapa interativo das Reservas de Caça Municipais em Portugal para a época 2026–2027: consulte por distrito as espécies, processos de caça e calendário de dias autorizados."/>
+  <meta property="og:title" content="Zonas de Caça Municipais 2026–2027 — OndeCaçar.pt"/>
+  <meta property="og:description" content="Mapa interativo das Zonas de Caça Municipais em Portugal para a época 2026–2027: consulte por distrito as espécies, processos de caça e calendário de dias autorizados."/>
   <meta property="og:image" content="https://xn--ondecaar-x0a.pt/og-image.png"/>
   <meta property="og:image:width" content="1200"/>
   <meta property="og:image:height" content="630"/>
   <meta property="og:url" content="https://xn--ondecaar-x0a.pt/"/>
   <meta name="twitter:card" content="summary_large_image"/>
-  <meta name="twitter:title" content="Reservas de Caça Municipais 2026–2027 — OndeCaçar.pt"/>
-  <meta name="twitter:description" content="Mapa interativo das Reservas de Caça Municipais em Portugal para a época 2026–2027: consulte por distrito as espécies, processos de caça e calendário de dias autorizados."/>
+  <meta name="twitter:title" content="Zonas de Caça Municipais 2026–2027 — OndeCaçar.pt"/>
+  <meta name="twitter:description" content="Mapa interativo das Zonas de Caça Municipais em Portugal para a época 2026–2027: consulte por distrito as espécies, processos de caça e calendário de dias autorizados."/>
   <meta name="twitter:image" content="https://xn--ondecaar-x0a.pt/og-image.png"/>
   <meta name="google-site-verification" content="kcgHfh-lDui5Fu_SHwUsKtcwvyQqXJVPoOmxBEs2Jrs" />
   <script type="application/ld+json">
@@ -26,7 +26,7 @@
     "@type": "WebSite",
     "name": "OndeCaçar.pt",
     "url": "https://xn--ondecaar-x0a.pt/",
-    "description": "Mapa interativo das Reservas de Caça Municipais em Portugal para a época 2026–2027, com espécies, processos de caça e calendário de dias autorizados por distrito.",
+    "description": "Mapa interativo das Zonas de Caça Municipais em Portugal para a época 2026–2027, com espécies, processos de caça e calendário de dias autorizados por distrito.",
     "inLanguage": "pt-PT"
   }
   </script>
@@ -336,14 +336,14 @@
 <div id="topbar">
   <img src="logo.png" alt="OndeCaçar">
   <div>
-    <h1 id="topbar-titulo">Reservas de Caça Municipais<br>2026–2027</h1>
+    <h1 id="topbar-titulo">Zonas de Caça Municipais<br>2026–2027</h1>
     <div id="topbar-atualizacao">
       <span id="topbar-visitantes"></span>
     </div>
   </div>
 </div>
 <p style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap">
-  Consulte o mapa de Portugal com as Reservas de Caça Municipais por distrito, incluindo espécies (coelho, perdiz, pombo e outras), processos de caça (salto, espera) e o calendário de dias autorizados para a época 2026–2027.
+  Consulte o mapa de Portugal com as Zonas de Caça Municipais por distrito, incluindo espécies (coelho, perdiz, pombo e outras), processos de caça (salto, espera) e o calendário de dias autorizados para a época 2026–2027.
 </p>
 
 <div id="header-mobile2">
@@ -662,7 +662,7 @@ function renderDistrito(id,nome){
   const info=document.getElementById('info-distrito');
   info.style.display='flex';
   document.getElementById('nome-distrito').textContent=nome;
-  document.getElementById('meta-reservas').textContent=reservas.length+' reservas';
+  document.getElementById('meta-reservas').textContent=reservas.length+' zonas de caça';
 
   renderReservas(reservas);
 }
@@ -732,7 +732,7 @@ function renderReservas(reservas){
 
   if(!algumVisivel&&temFiltro){
     const b=document.createElement('div');b.className='banner-aviso';
-    b.textContent='Nenhuma reserva corresponde aos filtros selecionados neste distrito.';
+    b.textContent='Nenhuma zona de caça corresponde aos filtros selecionados neste distrito.';
     lista.appendChild(b);
   }
 }
