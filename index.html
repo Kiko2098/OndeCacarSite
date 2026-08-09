@@ -299,6 +299,13 @@
     }
     .link-pae:hover,.link-pae:active{background:#e0ecd4}
 
+    .link-admitidos{
+      display:block;margin:0 14px 12px;padding:7px 10px;text-align:center;
+      background:#e0f2fe;border:1px solid #bae6fd;border-radius:8px;
+      color:#0369a1;font-size:.75rem;font-weight:700;text-decoration:none
+    }
+    .link-admitidos:hover,.link-admitidos:active{background:#cceafd}
+
     .banner-aviso{
       background:#fef9c3;border:1px solid #fde047;border-radius:8px;
       padding:10px 13px;font-size:.78rem;color:#713f12;
@@ -724,6 +731,19 @@ function renderReservas(reservas){
       linkPae.textContent='Ver PAE no ICNF ↗';
       linkPae.addEventListener('click',ev=>ev.stopPropagation());
       body.appendChild(linkPae);
+    }
+
+    if(reserva.links_admitidos&&reserva.links_admitidos.length){
+      const varias=reserva.links_admitidos.length>1;
+      reserva.links_admitidos.forEach((a,i)=>{
+        const linkAdmitidos=document.createElement('a');
+        linkAdmitidos.className='link-admitidos';linkAdmitidos.href=a.link;
+        linkAdmitidos.target='_blank';linkAdmitidos.rel='noopener';
+        const rotulo=varias&&a.data?'Lista de Admitidos ('+a.data+')':'Lista de Admitidos'+(varias?' '+(i+1):'');
+        linkAdmitidos.textContent=rotulo+' ↗';
+        linkAdmitidos.addEventListener('click',ev=>ev.stopPropagation());
+        body.appendChild(linkAdmitidos);
+      });
     }
 
     header.addEventListener('click',()=>{const ab=body.classList.toggle('aberto');arrow.classList.toggle('aberto',ab);if(ab&&estado!=='lista')setEstado('lista')});
